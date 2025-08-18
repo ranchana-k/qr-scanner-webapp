@@ -1,0 +1,98 @@
+<!-- about.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About QRPeek - Free Online QR Code Reader</title>
+    <meta name="description" content="Learn about our free online QR scanner. Quickly read and decode any QR code from images using our fast, easy-to-use tool.">
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <header class="navbar">
+    <div class="navbar-content">
+        <div class="logo">QRPeek</div>
+
+        <!-- Nav Links -->
+        <nav class="nav-links" id="nav-links">
+            <a href="index.html">Home</a>
+            <!-- ถ้าเป็นหน้า index.html ให้เพิ่มลิงก์อื่น -->
+            <!-- <a href="about.html">About</a>
+            <a href="privacy.html">Privacy Policy</a> -->
+        </nav>
+
+        <!-- Hamburger Button -->
+        <button class="hamburger" id="hamburger-button">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+    </div>
+</header>
+
+
+    <section class="section-light text-center">
+        <div class="content-box">
+        <h1>About Our QR Scanner</h1>
+        <p>Our free online QR code scanner allows you to quickly and easily read QR codes directly from your images. No camera or installation is required – just upload your image and get the decoded content instantly.</p>
+        </div>
+    </section>
+
+    <section class="section-white text-center">
+        <h2>Why Choose Our Tool?</h2>
+        <div class="content-box">
+        <ul class="center-list">
+            <li><strong>Fast and Reliable:</strong> Our tool scans images quickly and accurately.</li>
+            <li><strong>Easy to Use:</strong> No technical skills are needed; just upload and scan.</li>
+            <li><strong>Completely Free:</strong> Scan unlimited QR codes without any subscription.</li>
+            <li><strong>Works on Any Device:</strong> Desktop, laptop, tablet, or mobile browser.</li>
+        </ul>
+        </div>
+    </section>
+
+    <section class="section-blue text-center">
+        <div class="content-box">
+        <p>
+            Want to scan QR codes now? 
+            Go back to our <a href="index.html" style="color: var(--primary-color); font-weight:bold;">QRPeek page</a> and start scanning!
+        </p>
+        </div>
+    </section>
+    <footer class="footer-section">
+    <div class="footer-content">
+        <p>
+        <a href="index.html">Home</a> |
+        <a href="about.html">About</a> |
+        <a href="privacy.html">Privacy Policy</a>
+        </p>
+        <p>
+        For feedback: <a href="mailto:info@example.com" style="color: var(--primary-color);">info@example.com</a>
+        </p>
+        <p>© 2025 QRPeek. All rights reserved.</p>
+        <p style="font-size: 14px; color: #aeadad;">We do not store any uploaded images.</p>
+    </div>
+    </footer>
+    <script>
+    const hamburgerButton = document.getElementById('hamburger-button');
+    const navLinks = document.getElementById('nav-links');
+
+    if (hamburgerButton && navLinks) {
+        hamburgerButton.addEventListener('click', () => {
+            hamburgerButton.classList.toggle('active');
+
+            if (navLinks.style.maxHeight) {
+                navLinks.style.maxHeight = null;
+            } else {
+                navLinks.style.maxHeight = navLinks.scrollHeight + "px";
+            }
+        });
+    }
+    </script>
+
+</body>
+</html>

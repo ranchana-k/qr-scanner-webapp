@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan QR Code From Image - Free Online QR Scanner</title>
+    <meta name="description" content="A free and fast online tool to scan QR codes directly from your images. No installation needed! Upload a picture to instantly read and decode any QR code without a camera.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="navbar-content">
+    <div class="logo">QRPeek</div>
+
+    <!-- Hamburger Button -->
+    <button class="hamburger" id="hamburger-button" aria-label="Menu">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
+    <!-- Nav Links -->
+    <nav class="nav-links" id="nav-links">
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </nav>
+  </div>
+</header>
+
+
+<!-- Main QR Scanner Section -->
+<main class="section-light">
+    <div class="container text-center">
+        <header>
+            <h1>Scan QR Code From Image</h1>
+        </header>
+        <div class="upload-section">
+            <button id="browseBtn" class="btn">Browse from Device</button>
+            <button id="cameraBtn" class="btn">Take a Photo</button>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+        <div class="image-preview">
+            <img id="preview" src="#" alt="Preview of the uploaded image for QR code scanning">
+            <span id="preview-text">Image Preview</span>
+        </div>
+        <div class="result-section">
+            <h2>Decoded Result</h2>
+            <div id="result">...</div>
+        </div>
+    </div>
+</main>
+
+<!-- How To Guide Section -->
+<section class="how-to-section section-white">
+    <div class="how-to-container">
+        <h2>How to Scan Your QR Code Easily</h2>
+        <ul class="how-to-steps">
+            <li class="step">
+                <div class="step-icon">1</div>
+                <div class="step-text">
+                    <h3>Choose an Image</h3>
+                    <p>Click "Browse from Device" or "Take a Photo" to select the picture containing your QR code.</p>
+                </div>
+            </li>
+            <li class="step">
+                <div class="step-icon">2</div>
+                <div class="step-text">
+                    <h3>Automatic Scanning</h3>
+                    <p>The tool instantly detects and decodes the QR code from your image.</p>
+                </div>
+            </li>
+            <li class="step">
+                <div class="step-icon">3</div>
+                <div class="step-text">
+                    <h3>View Results</h3>
+                    <p>The decoded content will appear in the "Result" section above.</p>
+                </div>
+            </li>
+        </ul>
+        <p class="how-to-footer">
+            Our free QR code reader works directly in your browser — no camera or app required!
+        </p>
+    </div>
+</section>
+
+
+<!-- Privacy Policy Section -->
+<section class="section-light text-center">
+    <div class="content-box">
+        <h2>Privacy Policy</h2>
+        <p>We do not store or collect any images or QR code data. All images are processed securely in your browser and never sent to any server.</p>
+    </div>
+</section>
+<footer class="footer-section">
+  <div class="footer-content">
+    <p>
+      <a href="index.html">Home</a> |
+      <a href="about.html">About</a> |
+      <a href="privacy.html">Privacy Policy</a>
+    </p>
+    <p>
+      For feedback: <a href="mailto:info@example.com" style="color: var(--primary-color);">info@example.com</a>
+    </p>
+    <p>© 2025 QRPeek. All rights reserved.</p>
+    <p style="font-size: 14px; color: #aeadad;">We do not store any uploaded images.</p>
+  </div>
+</footer>
+
+<script>
+    const browseBtn = document.getElementById('browseBtn');
+    const cameraBtn = document.getElementById('cameraBtn');
+    const fileInput = document.getElementById('fileInput');
+    const previewImage = document.getElementById('preview');
+    const previewText = document.getElementById('preview-text');
+    const resultDiv = document.getElementById('result');
+
+    browseBtn.addEventListener('click', () => fileInput.click());
+    cameraBtn.addEventListener('click', () => {
+        alert('The camera function needs further development. For now, please select a file.');
+        fileInput.click();
+    });
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) handleFile(file);
+    });
+
+    function handleFile(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            previewImage.style.display = 'block';
+            previewText.style.display = 'none';
+        }
+        reader.readAsDataURL(file);
+        resultDiv.textContent = 'Processing your QR code...';
+        setTimeout(() => {
+            resultDiv.textContent = 'Scan completed (example result)';
+        }, 2000);
+    }
+    // --- Hamburger Menu Logic ---
+    
+    const hamburgerButton = document.getElementById('hamburger-button');
+    const navLinks = document.getElementById('nav-links');
+
+    hamburgerButton.addEventListener('click', () => {
+        hamburgerButton.classList.toggle('active');
+
+        if (navLinks.style.maxHeight) {
+            // ถ้าเปิดอยู่ ให้ปิด
+            navLinks.style.maxHeight = null;
+        } else {
+            // เปิดและปรับ maxHeight อัตโนมัติ
+            navLinks.style.maxHeight = navLinks.scrollHeight + "px";
+        }
+    });
+
+</script>
+
+</body>
+</html>
