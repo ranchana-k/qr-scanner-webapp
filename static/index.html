@@ -174,7 +174,7 @@
             formData.append('image', compressedFile);
 
             // *** IMPORTANT: Replace with your actual Cloud Run URL ***
-            const backendUrl = 'https://your-cloud-run-service-url/scan';
+            const backendUrl = 'https://qrpeek-scanner-923275641004.us-central1.run.app/';
 
             try {
                 const response = await fetch(backendUrl, {
