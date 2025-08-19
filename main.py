@@ -1,53 +1,74 @@
+# --------------------------------------------------------------------------
+# 1. Import Libraries
+# --------------------------------------------------------------------------
 import functions_framework
 import cv2
 from pyzbar.pyzbar import decode
-from flask import jsonify # ยังคงใช้ jsonify จาก Flask ที่แถมมากับ Framework ได้
+from flask import jsonify
 import os
 import tempfile
+import uuid  # For creating safe, unique filenames
+import logging # For better logging in a production environment
 
-# ไม่ต้อง import process_qr.py แล้ว เพราะเราจะย้ายโค้ดมาไว้ที่นี่เลย
+# --------------------------------------------------------------------------
+# 2. Configure Logging
+# --------------------------------------------------------------------------
+# Set up basic logging to show INFO level messages and above.
+# In Cloud Run, these logs will automatically appear in Google Cloud Logging.
+logging.basicConfig(level=logging.INFO)
 
+# --------------------------------------------------------------------------
+# 3. Core QR Code Processing Function
+# --------------------------------------------------------------------------
 def find_and_decode_qr(image_path: str):
     """
-    อ่านและถอดรหัส QR Code จากไฟล์รูปภาพ
-    (โค้ดนี้มาจาก process_qr.py ของคุณ)
+    Reads an image file, resizes it for safety, and decodes any QR codes found.
+    Args:
+        image_path: The full path to the temporary image file.
+    Returns:
+        A list of decoded strings from the QR codes.
     """
-    print(f"กำลังอ่านไฟล์รูปภาพจาก: {image_path}")
+    logging.info(f"Starting to process image from: {image_path}")
+
+    # Read the image from the specified path
     image = cv2.imread(image_path)
     if image is None:
-        print(f"ไม่สามารถอ่านไฟล์รูปภาพได้จาก path '{image_path}'")
+        logging.error(f"Could not read the image file from path: '{image_path}'")
         return []
 
-    # # ลดขนาดรูปถ้ารูปใหญ่เกินไป (เพื่อเร่งความเร็ว)
-    # max_dim = 800
-    # h, w = image.shape[:2]
-    # if max(h, w) > max_dim:
-    #     scale = max_dim / max(h, w)
-    #     image = cv2.resize(image, (int(w*scale), int(h*scale)), interpolation=cv2.INTER_AREA)
-    #     print(f"ย่อรูปภาพเหลือ {image.shape[1]}x{image.shape[0]} เพื่อความเร็ว")
-    
+    # [Safety Net] Resize the image on the backend if it's too large.
+    # This protects against direct API calls that bypass frontend compression.
+    max_dim = 1200  # A reasonable max dimension for backend processing
+    h, w = image.shape[:2]
+    if max(h, w) > max_dim:
+        scale = max_dim / max(h, w)
+        image = cv2.resize(image, (int(w * scale), int(h * scale)), interpolation=cv2.INTER_AREA)
+        logging.info(f"Backend resized image to {image.shape[1]}x{image.shape[0]} for safety.")
+
+    # Decode the QR codes from the (potentially resized) image
     decoded_objects = decode(image)
 
     if not decoded_objects:
-        print("ไม่พบ QR Code ในรูปภาพนี้")
+        logging.info("No QR codes were found in the provided image.")
         return []
 
+    # Extract and decode the data from each found object
     decoded_data_list = [obj.data.decode("utf-8") for obj in decoded_objects]
-    print(f"พบ QR Codes: {decoded_data_list}")
+    logging.info(f"Successfully found {len(decoded_data_list)} QR Code(s).")
     return decoded_data_list
 
-
+# --------------------------------------------------------------------------
+# 4. Main HTTP Cloud Function (The API Endpoint)
+# --------------------------------------------------------------------------
 @functions_framework.http
 def scan(request):
     """
-    HTTP Cloud Function ที่จะถูกเรียกโดย Cloud Run/Functions
-    Args:
-        request (flask.Request): The request object.
-    Returns:
-        The response text, or any set of values that can be turned into a
-        Response object using `make_response`.
+    The main HTTP Cloud Function that handles file uploads and orchestrates
+    the QR code scanning process.
     """
-    # --- จัดการ CORS Headers เพื่อให้ Frontend เรียกใช้ได้ ---
+    # --- CORS Preflight Handling ---
+    # This block is essential for allowing browsers from other domains
+    # (like your Firebase Hosting URL) to make requests to this API.
     if request.method == 'OPTIONS':
         headers = {
             'Access-Control-Allow-Origin': '*',
@@ -57,34 +78,49 @@ def scan(request):
         }
         return ('', 204, headers)
 
+    # --- Standard CORS Header for all other responses ---
     headers = {
         'Access-Control-Allow-Origin': '*'
     }
-    # ----------------------------------------------------
-
+    
+    # --- Input Validation ---
     if request.method != 'POST':
-        return (jsonify({'error': 'Method not allowed'}), 405, headers)
+        return (jsonify({'error': 'Method not allowed. Please use POST.'}), 405, headers)
 
     if 'image' not in request.files:
-        return (jsonify({'error': 'No image file provided'}), 400, headers)
-    
+        return (jsonify({'error': 'No image file provided in the request.'}), 400, headers)
+
     file = request.files['image']
 
     if file.filename == '':
-        return (jsonify({'error': 'No image selected'}), 400, headers)
+        return (jsonify({'error': 'No file was selected for upload.'}), 400, headers)
 
-    # ใช้ Temporary Directory ที่ปลอดภัยและจัดการตัวเองอัตโนมัติ
+    # --- Secure File Handling ---
+    # Create a safe, unique filename to prevent security issues.
+    _, extension = os.path.splitext(file.filename)
+    safe_filename = f"{uuid.uuid4()}{extension}"
+
+    # Use a temporary directory that cleans itself up automatically
     with tempfile.TemporaryDirectory() as temp_dir:
-        filepath = os.path.join(temp_dir, file.filename)
-        file.save(filepath)
+        filepath = os.path.join(temp_dir, safe_filename)
         
+        logging.info(f"Saving uploaded file temporarily to: {filepath}")
+        file.save(filepath)
+
+        # --- Execute Core Logic and Handle Responses ---
         try:
             decoded_results = find_and_decode_qr(filepath)
-            
+
             if decoded_results:
+                # Success case: QR code(s) found
                 return (jsonify({'results': decoded_results}), 200, headers)
             else:
+                # Success case: No QR code found
                 return (jsonify({'results': [], 'message': 'No QR code found in the image.'}), 200, headers)
+
         except Exception as e:
-            return (jsonify({'error': f'An error occurred: {str(e)}'}), 500, headers)
+            # Error case: Something went wrong during processing
+            logging.error(f"An unexpected error occurred: {str(e)}", exc_info=True)
+            # Return a generic error message to the user for security
+            return (jsonify({'error': 'An internal server error occurred while processing the image.'}), 500, headers)
 

@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QRPeek - Scan QR Code From Image Instantly</title>
     <meta name="description" content="A free and fast online tool to scan QR codes directly from your images. No installation needed! Upload a picture to instantly read and decode any QR code without a camera.">
+    
+    <!-- External Stylesheet -->
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
 
+<body>
     <header class="navbar">
         <div class="navbar-content">
             <div class="logo">QRPeek</div>
@@ -44,7 +48,9 @@
             </div>
             <div class="result-section">
                 <h2>Decoded Result</h2>
-                <div id="result">...</div>
+                <p id="scanStatusMessage" class="scan-status"></p>
+                <div id="result" class="decoded-content-box">
+                </div>
             </div>
         </div>
     </main>
@@ -106,10 +112,7 @@
 
     <!-- Library for image compression -->
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
-
-    <!-- Main Application Logic -->
     <script>
-        // --- 1. Element Selectors ---
         const browseBtn = document.getElementById('browseBtn');
         const cameraBtn = document.getElementById('cameraBtn');
         const fileInput = document.getElementById('fileInput');
@@ -118,31 +121,33 @@
         const resultDiv = document.getElementById('result');
         const hamburgerButton = document.getElementById('hamburger-button');
         const navLinks = document.getElementById('nav-links');
+        const scanStatusMessageEl = document.getElementById('scanStatusMessage');
 
-        // --- 2. Event Listeners ---
         browseBtn.addEventListener('click', () => fileInput.click());
         cameraBtn.addEventListener('click', () => {
             alert('The camera function requires further development. For now, please select a file.');
             fileInput.click();
         });
         fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                handleFile(file);
-            }
+            if (event.target.files[0]) handleFile(event.target.files[0]);
         });
         hamburgerButton.addEventListener('click', () => {
             hamburgerButton.classList.toggle('active');
-            if (navLinks.style.maxHeight) {
-                navLinks.style.maxHeight = null;
-            } else {
-                navLinks.style.maxHeight = navLinks.scrollHeight + "px";
-            }
+            navLinks.style.maxHeight = navLinks.style.maxHeight ? null : navLinks.scrollHeight + "px";
         });
 
-        // --- 3. Main File Handling Function ---
+        function isURL(str) {
+            // Updated regex to include tel: and other common schemes that users might want to click
+            const urlPattern = new RegExp('^(https?:\\/\\/|mailto:|tel:|sms:|ftp:\\/\\/|file:\\/\\/|data:)?'+ // protocol
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+            return !!urlPattern.test(str);
+        }
+
         async function handleFile(file) {
-            // Step A: Show image preview
             const reader = new FileReader();
             reader.onload = (e) => {
                 previewImage.src = e.target.result;
@@ -151,56 +156,99 @@
             };
             reader.readAsDataURL(file);
 
-            // Step B: Compress the image
-            resultDiv.textContent = 'Optimizing image...';
-            const options = {
-                maxSizeMB: 1,
-                maxWidthOrHeight: 1024,
-                useWebWorker: true,
-            };
+            scanStatusMessageEl.textContent = 'Optimizing image...';
+            scanStatusMessageEl.className = 'scan-status';
+            resultDiv.innerHTML = '';
 
+            const options = { maxSizeMB: 1, maxWidthOrHeight: 1024, useWebWorker: true };
             let compressedFile;
             try {
                 compressedFile = await imageCompression(file, options);
             } catch (error) {
-                resultDiv.textContent = 'Error: Could not optimize the image.';
-                console.error('Compression Error:', error);
+                scanStatusMessageEl.textContent = 'Error: Could not optimize image.';
+                scanStatusMessageEl.className = 'scan-status status-error';
                 return;
             }
 
-            // Step C: Send the compressed image to the backend
-            resultDiv.textContent = 'Scanning for QR Code...';
+            scanStatusMessageEl.textContent = 'Scanning for QR Code...';
+            scanStatusMessageEl.className = 'scan-status';
+
             const formData = new FormData();
             formData.append('image', compressedFile);
-
-            // *** IMPORTANT: Replace with your actual Cloud Run URL ***
+            
             const backendUrl = 'https://qrpeek-scanner-923275641004.us-central1.run.app/';
 
             try {
-                const response = await fetch(backendUrl, {
-                    method: 'POST',
-                    body: formData,
-                });
-
-                if (!response.ok) {
-                    const errData = await response.json().catch(() => ({ error: 'An unknown server error occurred.' }));
-                    throw new Error(errData.error);
-                }
+                const response = await fetch(backendUrl, { method: 'POST', body: formData });
+                if (!response.ok) throw new Error('Server responded with an error.');
 
                 const data = await response.json();
 
-                // Step D: Display the result
                 if (data.results && data.results.length > 0) {
-                    resultDiv.innerHTML = '<strong>Found QR Codes:</strong><br>' + data.results.join('<br>');
+                    scanStatusMessageEl.textContent = `Found ${data.results.length} QR Code(s)!`;
+                    scanStatusMessageEl.className = 'scan-status status-success';
+
+                    data.results.forEach(resultText => {
+                        const itemBox = document.createElement('div');
+                        itemBox.className = 'result-item-box flex-layout'; // Apply flex layout to all results
+                        
+                        const contentEl = document.createElement(isURL(resultText) ? 'a' : 'span'); // Still create <a> for URLs
+                        if (isURL(resultText)) {
+                            // Ensure proper protocol for tel:, mailto: etc.
+                            let hrefValue = resultText;
+                            if (resultText.startsWith('www.')) {
+                                hrefValue = `https://${resultText}`;
+                            } else if (!resultText.match(/^[a-z]+:/i)) { // If no protocol is specified
+                                hrefValue = `https://${resultText}`; // Default to https
+                            }
+                            contentEl.href = hrefValue;
+                            contentEl.target = '_blank';
+                            contentEl.rel = 'noopener noreferrer';
+                        }
+                        contentEl.textContent = resultText;
+
+                        // Create the copy button for ALL results
+                        const copyBtn = document.createElement('button');
+                        copyBtn.className = 'copy-button';
+                        copyBtn.textContent = 'Copy';
+                        copyBtn.onclick = async () => { // Made async to use await for clipboard API
+                            try {
+                                await navigator.clipboard.writeText(resultText);
+                                copyBtn.textContent = 'Copied!';
+                                copyBtn.classList.add('copied');
+                                setTimeout(() => {
+                                    copyBtn.textContent = 'Copy';
+                                    copyBtn.classList.remove('copied');
+                                }, 2000); // Revert back after 2 seconds
+                            } catch (err) {
+                                console.error('Failed to copy text: ', err); // Log error for debugging
+                                copyBtn.textContent = 'Failed!'; // Provide feedback to user
+                                copyBtn.classList.add('status-error'); // Red color for error feedback
+                                setTimeout(() => {
+                                    copyBtn.textContent = 'Copy';
+                                    copyBtn.classList.remove('status-error');
+                                }, 2000);
+                                // Fallback for browsers that don't support clipboard API or when permission is denied
+                                // This is a last resort to inform the user
+                                alert('Failed to copy text. Your browser might not support automatic copying or permission was denied. Please try copying manually.'); 
+                            }
+                        };
+                        
+                        itemBox.appendChild(contentEl);
+                        itemBox.appendChild(copyBtn);
+                        
+                        resultDiv.appendChild(itemBox);
+                    });
+
                 } else {
-                    resultDiv.textContent = data.message || 'No QR code was found in the image.';
+                    scanStatusMessageEl.textContent = data.message || 'No QR code was found.';
+                    scanStatusMessageEl.className = 'scan-status status-error';
                 }
             } catch (error) {
-                resultDiv.textContent = `Error: ${error.message}`;
-                console.error('Fetch Error:', error);
+                scanStatusMessageEl.textContent = `Error: ${error.message}`;
+                scanStatusMessageEl.className = 'scan-status status-error';
             }
         }
     </script>
-
 </body>
 </html>
