@@ -1,5 +1,5 @@
 # ใช้ Python 3.9 เป็น Base Image
-FROM python:3.9-slim-buster
+FROM python:3.12-slim-bookworm
 
 # ตั้งค่า Working Directory
 WORKDIR /app

@@ -1,0 +1,3 @@
+opencv-python-headless
+pyzbar
+functions-framework==3.*
