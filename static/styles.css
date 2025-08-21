@@ -459,3 +459,9 @@ a.decoded-text:hover {
         transform: rotate(-45deg) translate(7px, -7px);
     }
 }
+
+.center-list {
+  list-style-type: none;   /* เอา bullet ออก */
+  padding-left: 0;         /* ลบช่องว่างด้านซ้าย */
+  text-align: center;      /* ถ้าต้องการให้อยู่ตรงกลาง */
+}
