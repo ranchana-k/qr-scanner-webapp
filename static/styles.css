@@ -1,3 +1,6 @@
+/* =============================================== */
+/* === Root Variables & Body Styles === */
+/* =============================================== */
 :root {
     --primary-color: #00b4d8;
     --secondary-color: #005f73;
@@ -17,7 +20,9 @@ body {
     font-size: 17px;
 }
 
-/* --- Navbar Styles --- */
+/* =============================================== */
+/* === Navbar & Header Styles === */
+/* =============================================== */
 .navbar {
     background-color: var(--bg-white);
     padding: 15px 30px;
@@ -43,6 +48,12 @@ body {
     color: var(--secondary-color);
 }
 
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .nav-links a {
     color: var(--secondary-color);
     text-decoration: none;
@@ -56,13 +67,27 @@ body {
     background-color: #eaf6ff;
 }
 
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+header h1 {
+    color: var(--secondary-color);
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: 700;
 }
 
-/* --- Main Content Styles --- */
+h2 { 
+    font-size: 24px; 
+    margin-bottom: 15px; 
+    font-weight: 600; 
+}
+
+p { 
+    margin-bottom: 1rem; 
+}
+
+/* =============================================== */
+/* === Main Content & Scanner Section === */
+/* =============================================== */
 main {
     flex-grow: 1;
     display: flex;
@@ -83,17 +108,6 @@ main {
     box-sizing: border-box;
 }
 
-header h1 {
-    color: var(--secondary-color);
-    margin-top: 0;
-    margin-bottom: 30px;
-    font-size: 32px;
-    font-weight: 700;
-}
-
-h2 { font-size: 24px; margin-bottom: 15px; font-weight: 600; }
-p { margin-bottom: 1rem; }
-
 .upload-section .btn {
     background-color: var(--primary-color);
     color: white;
@@ -106,9 +120,9 @@ p { margin-bottom: 1rem; }
     transition: background-color 0.3s;
 }
 
-.upload-section .btn:hover { background-color: #0077b6; }
-
-#fileInput { display: none; }
+.upload-section .btn:hover { 
+    background-color: #0077b6; 
+}
 
 .image-preview {
     margin-top: 30px;
@@ -128,10 +142,158 @@ p { margin-bottom: 1rem; }
     display: none;
 }
 
-.result-section { margin-top: 20px; }
-.result-section h2 { color: var(--secondary-color); }
+.result-section { 
+    margin-top: 20px; 
+}
 
-/* --- How To Guide Styles --- */
+.result-section h2 { 
+    color: var(--secondary-color); 
+}
+
+.scan-status {
+    font-weight: 300;
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    min-height: 1.5em; 
+    transition: color 0.3s ease-in-out;
+    font-size: 12px;
+}
+
+.status-success {
+    color: #28a745; 
+}
+
+.status-error {
+    color: #dc3545;
+}
+
+/* =============================================== */
+/* === CORRECTED QR Code Result Display Styles === */
+/* =============================================== */
+
+/* The main container box. It's the box that's visible when empty. */
+.decoded-content-box {
+    background-color: #f8f9fa; /* Light grey background for the whole area */
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px; /* Padding around the results */
+    min-height: 100px; /* This makes the box visible when empty */
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Space between each result row */
+}
+
+/* A single result row: contains the text box and the icon */
+.result-row {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between the text box and the icon */
+}
+
+/* The actual "text box" with its own style */
+.decoded-text {
+    flex-grow: 1;
+    background-color: var(--bg-white); /* White background to stand out */
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 10px 15px;
+    word-break: break-all;
+    text-align: left;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+a.decoded-text {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+a.decoded-text:hover {
+    text-decoration: underline;
+}
+
+/* The copy button, styled as an icon */
+.copy-button {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.copy-button:hover {
+    background-color: #e9e9e9;
+}
+
+/* ในไฟล์ styles.css */
+
+.copy-button svg {
+    width: 22px;
+    height: 22px;
+    /* [เปลี่ยน] ไม่เติมสีทึบ แต่ให้เป็นสีของเส้นขอบแทน */
+    fill: none;
+    stroke: var(--text-color);
+}
+
+.copy-button:disabled svg {
+    fill: var(--text-color);
+    stroke: none;
+}
+
+/* ================================================= */
+/* === NEW: Tooltip for Copy Button === */
+/* ================================================= */
+
+/* 1. ตั้งค่าให้ตัวปุ่มเป็นจุดอ้างอิงสำหรับตำแหน่งของ Tooltip */
+.copy-button {
+    position: relative; /* สำคัญมาก! */
+}
+
+/* 2. สร้างและออกแบบ Tooltip ด้วย pseudo-element ::after */
+.copy-button::after {
+    content: 'Copy'; /* ข้อความที่จะแสดงใน Tooltip */
+    position: absolute;
+    bottom: calc(100% + 5px); /* ตำแหน่ง: อยู่เหนือปุ่ม 5px */
+    left: 50%; /* จัดให้อยู่กึ่งกลางแนวนอนของปุ่ม */
+    transform: translateX(-50%); /* เทคนิคจัดกลางให้สมบูรณ์ */
+    
+    background-color: var(--text-color); /* สีพื้นหลัง (เทาเข้ม) */
+    color: white; /* สีข้อความ */
+    padding: 4px 8px; /* ระยะห่างภายใน */
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap; /* ป้องกันไม่ให้ข้อความขึ้นบรรทัดใหม่ */
+    
+    /* ซ่อน Tooltip ไว้เป็นค่าเริ่มต้น */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    z-index: 10; /* ทำให้ Tooltip อยู่เหนือองค์ประกอบอื่น */
+}
+
+/* 3. ทำให้ Tooltip แสดงขึ้นมาเมื่อผู้ใช้ hover ที่ปุ่ม */
+.copy-button:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 4. [สำคัญ] ซ่อน Tooltip เมื่อปุ่มถูกกดไปแล้ว (disabled) */
+.copy-button:disabled::after {
+    display: none;
+}
+
+
+/* =============================================== */
+/* === How To Guide Section === */
+/* =============================================== */
 .how-to-section {
     background-color: var(--bg-white);
     padding: 60px 20px;
@@ -197,7 +359,9 @@ p { margin-bottom: 1rem; }
     color: var(--secondary-color);
 }
 
-/* --- Footer --- */
+/* =============================================== */
+/* === Footer Section === */
+/* =============================================== */
 .footer-section {
     background-color: var(--secondary-color);
     color: white;
@@ -219,18 +383,18 @@ p { margin-bottom: 1rem; }
     margin: 5px 0;
 }
 
-/* --- Utility Classes --- */
+/* =============================================== */
+/* === Utility & Section Backgrounds === */
+/* =============================================== */
 .content-box { max-width: 700px; margin: 0 auto; }
 .text-center { text-align: center; }
-.center-list { list-style-type: none; padding: 0; max-width: 700px; margin: 0 auto; }
-.center-list li { margin-bottom: 12px; }
-
-/* --- Section Background Colors --- */
 .section-light { background-color: var(--bg-light); padding: 40px 20px; }
 .section-white { background-color: var(--bg-white); padding: 40px 20px; }
 .section-blue { background-color: #e0f7fa; padding: 40px 20px; }
 
-/* --- Hamburger Menu Styles --- */
+/* =============================================== */
+/* === Responsive & Hamburger Menu === */
+/* =============================================== */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -252,99 +416,11 @@ p { margin-bottom: 1rem; }
     transition: all 0.3s linear;
 }
 
-/* --- Styles for Scan Status and Result Box (Cleaned Up) --- */
-
-.scan-status {
-    font-weight: 300; /* Thin weight as requested */
-    text-align: center;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    min-height: 1.5em; 
-    transition: color 0.3s ease-in-out;
-    font-size: 12px; /* Small size as requested */
-}
-
-.status-success {
-    color: #28a745; 
-}
-
-.status-error {
-    color: #dc3545;
-}
-
-.decoded-content-box {
-    padding: 10px;
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    min-height: 100px;
-    display: block;
-    margin-top: 10px;
-}
-
-/* Combined styles for individual result items */
-.result-item-box {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    padding: 15px;
-    margin-bottom: 10px;
-    text-align: left;
-    font-weight: normal;
-    font-size: 16px;
-    word-wrap: break-word;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-}
-
-.result-item-box:last-child {
-    margin-bottom: 0;
-}
-
-/* Styles for Linkable Results and Copy Button */
-
-.result-item-box a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.result-item-box a:hover {
-    text-decoration: underline;
-}
-
-.copy-button {
-    background-color: #e9ecef;
-    color: var(--secondary-color);
-    border: none;
-    border-radius: 5px;
-    padding: 6px 12px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    flex-shrink: 0;
-}
-
-.copy-button:hover {
-    background-color: #ced4da;
-}
-
-.copy-button.copied {
-    background-color: #28a745;
-    color: white;
-}
-
-
-/* --- Responsive Styles for Mobile Navbar --- */
 @media (max-width: 768px) {
     .nav-links {
         display: block;
         position: absolute;
-        top: 60px;
+        top: 60px; /* Adjust based on your navbar height */
         left: 0;
         width: 100%;
         background-color: var(--bg-white);
@@ -353,6 +429,7 @@ p { margin-bottom: 1rem; }
         overflow: hidden;
         transition: max-height 0.3s ease-out;
     }
+
     .nav-links a {
         text-align: center;
         padding: 15px;
@@ -361,18 +438,23 @@ p { margin-bottom: 1rem; }
         display: block;
         border-top: 1px solid #eaf6ff;
     }
+
     .nav-links a:first-child {
         border-top: none;
     }
+
     .hamburger {
         display: flex;
     }
+
     .hamburger.active .hamburger-line:nth-child(1) {
         transform: rotate(45deg) translate(7px, 7px);
     }
+
     .hamburger.active .hamburger-line:nth-child(2) {
         opacity: 0;
     }
+
     .hamburger.active .hamburger-line:nth-child(3) {
         transform: rotate(-45deg) translate(7px, -7px);
     }

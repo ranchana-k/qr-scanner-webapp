@@ -5,250 +5,255 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QRPeek - Scan QR Code From Image Instantly</title>
     <meta name="description" content="A free and fast online tool to scan QR codes directly from your images. No installation needed! Upload a picture to instantly read and decode any QR code without a camera.">
-    
     <!-- External Stylesheet -->
     <link rel="stylesheet" href="styles.css">
-    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <header class="navbar">
-        <div class="navbar-content">
-            <div class="logo">QRPeek</div>
-            <button class="hamburger" id="hamburger-button" aria-label="Menu">
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-            </button>
-            <nav class="nav-links" id="nav-links">
-                <a href="about.html">About</a>
-                <a href="privacy.html">Privacy Policy</a>
-            </nav>
-        </div>
-    </header>
 
-    <!-- Main QR Scanner Section -->
-    <main class="section-light">
-        <div class="container text-center">
-            <header>
-                <h1>Scan QR Code From Image</h1>
-            </header>
-            <div class="upload-section">
-                <button id="browseBtn" class="btn">Browse from Device</button>
-                <button id="cameraBtn" class="btn">Take a Photo</button>
-                <input type="file" id="fileInput" accept="image/*">
+<header class="navbar">
+    <div class="navbar-content">
+        <div class="logo">QRPeek</div>
+        <button class="hamburger" id="hamburger-button" aria-label="Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        <nav class="nav-links" id="nav-links">
+            <a href="about.html">About</a>
+            <a href="privacy.html">Privacy Policy</a>
+        </nav>
+    </div>
+</header>
+
+<!-- Main QR Scanner Section -->
+<main class="section-light">
+    <div class="container text-center">
+        <header>
+            <h1>Scan QR Code From Image</h1>
+        </header>
+        <div class="upload-section">
+            <button id="browseBtn" class="btn">Browse from Device</button>
+            <button id="cameraBtn" class="btn">Take a Photo</button>
+            <input type="file" id="fileInput" accept="image/*" style="display:none;">
+        </div>
+        <div class="image-preview">
+            <img id="preview" src="#" alt="Preview of the uploaded image for QR code scanning">
+            <span id="preview-text">Image Preview</span>
+        </div>
+        <div class="result-section">
+            <h2>Decoded Result (s)</h2>
+            <p id="scanStatusMessage" class="scan-status"></p>
+            <div id="result" class="decoded-content-box">
+                <!-- Decoded results will be injected here -->
             </div>
-            <div class="image-preview">
-                <img id="preview" src="#" alt="Preview of the uploaded image for QR code scanning">
-                <span id="preview-text">Image Preview</span>
-            </div>
-            <div class="result-section">
-                <h2>Decoded Result</h2>
-                <p id="scanStatusMessage" class="scan-status"></p>
-                <div id="result" class="decoded-content-box">
+        </div>
+    </div>
+</main>
+
+<!-- How To Guide Section -->
+<section class="how-to-section section-white">
+    <div class="how-to-container">
+        <h2>How to Scan Your QR Code Easily</h2>
+        <ul class="how-to-steps">
+            <li class="step">
+                <div class="step-icon">1</div>
+                <div class="step-text">
+                    <h3>Choose an Image</h3>
+                    <p>Click "Browse from Device" or "Take a Photo" to select the picture containing your QR code.</p>
                 </div>
-            </div>
-        </div>
-    </main>
+            </li>
+            <li class="step">
+                <div class="step-icon">2</div>
+                <div class="step-text">
+                    <h3>Automatic Scanning</h3>
+                    <p>The tool instantly detects and decodes the QR code from your image.</p>
+                </div>
+            </li>
+            <li class="step">
+                <div class="step-icon">3</div>
+                <div class="step-text">
+                    <h3>View Results</h3>
+                    <p>The decoded content will appear in the "Result" section above.</p>
+                </div>
+            </li>
+        </ul>
+        <p class="how-to-footer">
+            Our free QR code reader works directly in your browser — no camera or app required!
+        </p>
+    </div>
+</section>
 
-    <!-- How To Guide Section -->
-    <section class="how-to-section section-white">
-        <div class="how-to-container">
-            <h2>How to Scan Your QR Code Easily</h2>
-            <ul class="how-to-steps">
-                <li class="step">
-                    <div class="step-icon">1</div>
-                    <div class="step-text">
-                        <h3>Choose an Image</h3>
-                        <p>Click "Browse from Device" or "Take a Photo" to select the picture containing your QR code.</p>
-                    </div>
-                </li>
-                <li class="step">
-                    <div class="step-icon">2</div>
-                    <div class="step-text">
-                        <h3>Automatic Scanning</h3>
-                        <p>The tool instantly detects and decodes the QR code from your image.</p>
-                    </div>
-                </li>
-                <li class="step">
-                    <div class="step-icon">3</div>
-                    <div class="step-text">
-                        <h3>View Results</h3>
-                        <p>The decoded content will appear in the "Result" section above.</p>
-                    </div>
-                </li>
-            </ul>
-            <p class="how-to-footer">
-                Our free QR code reader works directly in your browser — no camera or app required!
-            </p>
-        </div>
-    </section>
+<!-- Privacy Policy Section -->
+<section class="section-light text-center">
+    <div class="content-box">
+        <h2>Privacy-Focused</h2>
+        <p>We respect your privacy. All images are processed securely in your browser and never sent to our servers. The QR code data is not stored or collected.</p>
+    </div>
+</section>
 
-    <!-- Privacy Policy Section -->
-    <section class="section-light text-center">
-        <div class="content-box">
-            <h2>Privacy-Focused</h2>
-            <p>We respect your privacy. All images are processed securely in your browser and never sent to our servers. The QR code data is not stored or collected.</p>
-        </div>
-    </section>
+<footer class="footer-section">
+    <div class="footer-content">
+        <p>
+            <a href="index.html">Home</a> |
+            <a href="about.html">About</a> |
+            <a href="privacy.html">Privacy Policy</a>
+        </p>
+        <p>
+            For feedback: <a href="mailto:feedback@qrpeek.me" style="color: var(--primary-color);">feedback@qrpeek.me</a>
+        </p>
+        <p>© 2025 QRPeek. All rights reserved.</p>
+    </div>
+</footer>
 
-    <footer class="footer-section">
-        <div class="footer-content">
-            <p>
-                <a href="index.html">Home</a> |
-                <a href="about.html">About</a> |
-                <a href="privacy.html">Privacy Policy</a>
-            </p>
-            <p>
-                For feedback: <a href="mailto:feedback@qrpeek.me" style="color: var(--primary-color);">feedback@qrpeek.me</a>
-            </p>
-            <p>© 2025 QRPeek. All rights reserved.</p>
-        </div>
-    </footer>
+<!-- Library for image compression -->
+<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
+<script>
+    const browseBtn = document.getElementById('browseBtn');
+    const cameraBtn = document.getElementById('cameraBtn');
+    const fileInput = document.getElementById('fileInput');
+    const previewImage = document.getElementById('preview');
+    const previewText = document.getElementById('preview-text');
+    const resultDiv = document.getElementById('result');
+    const hamburgerButton = document.getElementById('hamburger-button');
+    const navLinks = document.getElementById('nav-links');
+    const scanStatusMessageEl = document.getElementById('scanStatusMessage');
+    
+    // SVG Icons for Copy Button
+    const copyIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+</svg>`;
+    const copiedIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#28a745">
+    <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+</svg>`;
+    // Button click handlers
+    browseBtn.addEventListener('click', () => {
+        fileInput.removeAttribute('capture');
+        fileInput.click();
+    });
 
-    <!-- Library for image compression -->
-    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
-    <script>
-        const browseBtn = document.getElementById('browseBtn');
-        const cameraBtn = document.getElementById('cameraBtn');
-        const fileInput = document.getElementById('fileInput');
-        const previewImage = document.getElementById('preview');
-        const previewText = document.getElementById('preview-text');
-        const resultDiv = document.getElementById('result');
-        const hamburgerButton = document.getElementById('hamburger-button');
-        const navLinks = document.getElementById('nav-links');
-        const scanStatusMessageEl = document.getElementById('scanStatusMessage');
+    cameraBtn.addEventListener('click', () => {
+        fileInput.setAttribute('capture', 'environment');
+        fileInput.click();
+    });
 
-        browseBtn.addEventListener('click', () => fileInput.click());
-        cameraBtn.addEventListener('click', () => {
-            alert('The camera function requires further development. For now, please select a file.');
-            fileInput.click();
-        });
-        fileInput.addEventListener('change', (event) => {
-            if (event.target.files[0]) handleFile(event.target.files[0]);
-        });
-        hamburgerButton.addEventListener('click', () => {
-            hamburgerButton.classList.toggle('active');
-            navLinks.style.maxHeight = navLinks.style.maxHeight ? null : navLinks.scrollHeight + "px";
-        });
+    fileInput.addEventListener('change', (event) => {
+        if (event.target.files && event.target.files[0]) {
+            handleFile(event.target.files[0]);
+        }
+    });
 
-        function isURL(str) {
-            // Updated regex to include tel: and other common schemes that users might want to click
-            const urlPattern = new RegExp('^(https?:\\/\\/|mailto:|tel:|sms:|ftp:\\/\\/|file:\\/\\/|data:)?'+ // protocol
-                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-                '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-                '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-                '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-            return !!urlPattern.test(str);
+    hamburgerButton.addEventListener('click', () => {
+        hamburgerButton.classList.toggle('active');
+        navLinks.style.maxHeight = navLinks.style.maxHeight ? null : navLinks.scrollHeight + "px";
+    });
+
+    function isURL(str) {
+        const urlPattern = new RegExp('^(https?:\\/\\/|mailto:|tel:|sms:|ftp:\\/\\/|file:\\/\\/|data:)?' +
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+        '((\\d{1,3}\\.){3}\\d{1,3}))' +
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+        '(\\?[;&a-z\\d%_.~+=-]*)?' +
+        '(\\#[-a-z\\d_]*)?$', 'i');
+        return !!urlPattern.test(str);
+    }
+
+    async function handleFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImage.src = e.target.result;
+            previewImage.style.display = 'block';
+            previewText.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+        
+        scanStatusMessageEl.textContent = 'Optimizing image...';
+        scanStatusMessageEl.className = 'scan-status';
+        resultDiv.innerHTML = '';
+        
+        const options = { maxSizeMB: 1, maxWidthOrHeight: 1024, useWebWorker: true };
+        let compressedFile;
+        try {
+            compressedFile = await imageCompression(file, options);
+        } catch (error) {
+            scanStatusMessageEl.textContent = 'Error: Could not optimize image.';
+            scanStatusMessageEl.className = 'scan-status status-error';
+            return;
         }
 
-        async function handleFile(file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewImage.src = e.target.result;
-                previewImage.style.display = 'block';
-                previewText.style.display = 'none';
-            };
-            reader.readAsDataURL(file);
+        scanStatusMessageEl.textContent = 'Scanning for QR Code...';
+        scanStatusMessageEl.className = 'scan-status';
 
-            scanStatusMessageEl.textContent = 'Optimizing image...';
-            scanStatusMessageEl.className = 'scan-status';
-            resultDiv.innerHTML = '';
+        const formData = new FormData();
+        formData.append('image', compressedFile);
+        
+        const backendUrl = 'https://qrpeek-scanner-923275641004.us-central1.run.app/';
+        try {
+            const response = await fetch(backendUrl, { method: 'POST', body: formData });
+            if (!response.ok) throw new Error('Server responded with an error.');
 
-            const options = { maxSizeMB: 1, maxWidthOrHeight: 1024, useWebWorker: true };
-            let compressedFile;
-            try {
-                compressedFile = await imageCompression(file, options);
-            } catch (error) {
-                scanStatusMessageEl.textContent = 'Error: Could not optimize image.';
-                scanStatusMessageEl.className = 'scan-status status-error';
-                return;
-            }
+            const data = await response.json();
 
-            scanStatusMessageEl.textContent = 'Scanning for QR Code...';
-            scanStatusMessageEl.className = 'scan-status';
+            if (data.results && data.results.length > 0) {
+                scanStatusMessageEl.textContent = `Found ${data.results.length} QR Code(s)!`;
+                scanStatusMessageEl.className = 'scan-status status-success';
+                
+                data.results.forEach(resultText => {
+                    const resultRow = document.createElement('div');
+                    resultRow.className = 'result-row';
 
-            const formData = new FormData();
-            formData.append('image', compressedFile);
-            
-            const backendUrl = 'https://qrpeek-scanner-923275641004.us-central1.run.app/';
+                    const contentEl = document.createElement(isURL(resultText) ? 'a' : 'span');
+                    contentEl.className = 'decoded-text'; 
 
-            try {
-                const response = await fetch(backendUrl, { method: 'POST', body: formData });
-                if (!response.ok) throw new Error('Server responded with an error.');
-
-                const data = await response.json();
-
-                if (data.results && data.results.length > 0) {
-                    scanStatusMessageEl.textContent = `Found ${data.results.length} QR Code(s)!`;
-                    scanStatusMessageEl.className = 'scan-status status-success';
-
-                    data.results.forEach(resultText => {
-                        const itemBox = document.createElement('div');
-                        itemBox.className = 'result-item-box flex-layout'; // Apply flex layout to all results
-                        
-                        const contentEl = document.createElement(isURL(resultText) ? 'a' : 'span'); // Still create <a> for URLs
-                        if (isURL(resultText)) {
-                            // Ensure proper protocol for tel:, mailto: etc.
-                            let hrefValue = resultText;
-                            if (resultText.startsWith('www.')) {
-                                hrefValue = `https://${resultText}`;
-                            } else if (!resultText.match(/^[a-z]+:/i)) { // If no protocol is specified
-                                hrefValue = `https://${resultText}`; // Default to https
-                            }
-                            contentEl.href = hrefValue;
-                            contentEl.target = '_blank';
-                            contentEl.rel = 'noopener noreferrer';
+                    if (isURL(resultText)) {
+                        let hrefValue = resultText;
+                        if (!/^[a-z]+:/i.test(resultText)) {
+                            hrefValue = `https://${resultText}`;
                         }
-                        contentEl.textContent = resultText;
+                        contentEl.href = hrefValue;
+                        contentEl.target = '_blank';
+                        contentEl.rel = 'noopener noreferrer';
+                    }
+                    contentEl.textContent = resultText;
+                    
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-button';
+                    copyBtn.setAttribute('aria-label', 'Copy result');
+                    copyBtn.innerHTML = copyIconSVG;
 
-                        // Create the copy button for ALL results
-                        const copyBtn = document.createElement('button');
-                        copyBtn.className = 'copy-button';
-                        copyBtn.textContent = 'Copy';
-                        copyBtn.onclick = async () => { // Made async to use await for clipboard API
-                            try {
-                                await navigator.clipboard.writeText(resultText);
-                                copyBtn.textContent = 'Copied!';
-                                copyBtn.classList.add('copied');
-                                setTimeout(() => {
-                                    copyBtn.textContent = 'Copy';
-                                    copyBtn.classList.remove('copied');
-                                }, 2000); // Revert back after 2 seconds
-                            } catch (err) {
-                                console.error('Failed to copy text: ', err); // Log error for debugging
-                                copyBtn.textContent = 'Failed!'; // Provide feedback to user
-                                copyBtn.classList.add('status-error'); // Red color for error feedback
-                                setTimeout(() => {
-                                    copyBtn.textContent = 'Copy';
-                                    copyBtn.classList.remove('status-error');
-                                }, 2000);
-                                // Fallback for browsers that don't support clipboard API or when permission is denied
-                                // This is a last resort to inform the user
-                                alert('Failed to copy text. Your browser might not support automatic copying or permission was denied. Please try copying manually.'); 
-                            }
-                        };
-                        
-                        itemBox.appendChild(contentEl);
-                        itemBox.appendChild(copyBtn);
-                        
-                        resultDiv.appendChild(itemBox);
-                    });
+                    copyBtn.onclick = async () => {
+                        try {
+                            await navigator.clipboard.writeText(resultText);
+                            copyBtn.innerHTML = copiedIconSVG;
+                            copyBtn.disabled = true;
+                            setTimeout(() => {
+                                copyBtn.innerHTML = copyIconSVG;
+                                copyBtn.disabled = false;
+                            }, 2000);
+                        } catch (err) {
+                            console.error('Failed to copy text: ', err);
+                            alert('Failed to copy text. Please try copying manually.'); 
+                        }
+                    };
 
-                } else {
-                    scanStatusMessageEl.textContent = data.message || 'No QR code was found.';
-                    scanStatusMessageEl.className = 'scan-status status-error';
-                }
-            } catch (error) {
-                scanStatusMessageEl.textContent = `Error: ${error.message}`;
+                    resultRow.appendChild(contentEl);
+                    resultRow.appendChild(copyBtn);
+                    resultDiv.appendChild(resultRow);
+                });
+            } else {
+                scanStatusMessageEl.textContent = data.message || 'No QR code was found.';
                 scanStatusMessageEl.className = 'scan-status status-error';
             }
+        } catch (error) {
+            scanStatusMessageEl.textContent = `Error: ${error.message}`;
+            scanStatusMessageEl.className = 'scan-status status-error';
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
