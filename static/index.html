@@ -36,8 +36,8 @@
             <h1>Scan QR Code From Image</h1>
         </header>
         <div class="upload-section">
-            <button id="browseBtn" class="btn">Browse from Device</button>
-            <button id="cameraBtn" class="btn">Take a Photo</button>
+            <button id="browseBtn" class="btn">Select an Image</button>
+            <!-- <button id="cameraBtn" class="btn">Take a Photo</button> -->
             <input type="file" id="fileInput" accept="image/*" style="display:none;">
         </div>
         <div class="image-preview">
@@ -113,7 +113,7 @@
 <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
 <script>
     const browseBtn = document.getElementById('browseBtn');
-    const cameraBtn = document.getElementById('cameraBtn');
+    // const cameraBtn = document.getElementById('cameraBtn');
     const fileInput = document.getElementById('fileInput');
     const previewImage = document.getElementById('preview');
     const previewText = document.getElementById('preview-text');
@@ -132,14 +132,14 @@
 </svg>`;
     // Button click handlers
     browseBtn.addEventListener('click', () => {
-        fileInput.removeAttribute('capture');
+        // fileInput.removeAttribute('capture');
         fileInput.click();
     });
 
-    cameraBtn.addEventListener('click', () => {
-        fileInput.setAttribute('capture', 'environment');
-        fileInput.click();
-    });
+    // cameraBtn.addEventListener('click', () => {
+    //     fileInput.setAttribute('capture', 'environment');
+    //     fileInput.click();
+    // });
 
     fileInput.addEventListener('change', (event) => {
         if (event.target.files && event.target.files[0]) {
